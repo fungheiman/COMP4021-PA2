@@ -349,6 +349,8 @@ function createMonster(num) {
     }
 }
 
+
+
 // This function creates monster
 function creatGoodThings(num) {
 
@@ -412,6 +414,7 @@ function shootBullet() {
 function moveBullets() {
     // Go through all bullets
     var bullets = svgdoc.getElementById("bullets");
+    
     for (var i = 0; i < bullets.childNodes.length; i++) {
         var node = bullets.childNodes.item(i);
         var x = parseInt(node.getAttribute("x"));
@@ -617,7 +620,7 @@ function finishLevel(){
     svgdoc.getElementById("levelpopup").style.visibility = "";    
     svgdoc.getElementById("levelpopuptext").textContent = "Level " + currentLevel;
 
-    setTimeout("startNewLevel()", 5000);
+    setTimeout("startNewLevel()", 2000);
 }
 
 function startNewLevel(){
@@ -626,6 +629,7 @@ function startNewLevel(){
     // reset var and events
     player = new Player();
     bulletLeft = MAXBULLET;
+    canShoot = true;
     timeRemain = GAMETIMELIMIT;
     svgdoc.documentElement.addEventListener("keydown", keydown, false);
     svgdoc.documentElement.addEventListener("keyup", keyup, false);
@@ -638,6 +642,7 @@ function startNewLevel(){
     var monsternum = INITIAL_MONSTER_NUM + MONSTER_INCREMENT * currentLevel - MONSTER_INCREMENT;
     createMonster(monsternum);
     var goodthingnum = INITIAL_GOOD_NUM + GOOD_INCREMENT * currentLevel - GOOD_INCREMENT;
+    goodthingLeft = goodthingnum;
     creatGoodThings(goodthingnum);
     
     // start the game interval and timer again
