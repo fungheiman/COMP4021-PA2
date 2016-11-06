@@ -90,7 +90,7 @@ Player.prototype.collideScreen = function(position) {
 // Below are constants used in the game
 //
 var PLAYER_SIZE = new Size(40, 40);         // The size of the player
-var MONSTER_SIZE = new Size(40, 40);        // The size of a monster
+var MONSTER_SIZE = new Size(35, 40);        // The size of a monster
 var SCREEN_SIZE = new Size(600, 560);       // The size of the game screen
 var BULLET_SIZE = new Size(10, 10);         // The size of a bullet
 var GOODTHINGD_SIZE = new Size(50, 38);     // The size of the good thing
@@ -99,11 +99,12 @@ var PLAYER_INIT_POS  = new Point(0, 0);     // The initial position of the playe
 var MOVE_DISPLACEMENT = 5;                  // The speed of the player in motion
 var JUMP_SPEED = 15;                        // The speed of the player jumping
 var BULLET_SPEED = 10.0;                    // The speed of a bullet = pixels it moves each game loop
+var MONSTER_SPEED = 1.0;                    // The speed of a monster = pixels it moves each game loop
 var VERTICAL_DISPLACEMENT = 1;              // The displacement of vertical speed
 
 var GAME_INTERVAL = 25;                     // The time interval of running the game
 var SHOOT_INTERVAL = 200.0;                 // The period when shooting is disabled
-var GAMETIMELIMIT = 30;
+var GAMETIMELIMIT = 60;
 var MAXBULLET = 8;
 var INITIAL_MONSTER_NUM = 6;
 var MONSTER_INCREMENT = 4;
@@ -122,11 +123,12 @@ var timerInterval = null;
 var score = 0;
 var currentLevel = 1;
 var cheatmode = false;
-var timeRemain = GAME_INTERVAL;
+var timeRemain = GAMETIMELIMIT;
 var gametime = null;
 var goodthingLeft = INITIAL_GOOD_NUM;
 var username = "Anonymous";
 var last_username = username;
+var monsterUp = true;
 
 //
 // Variables for bullets
@@ -144,7 +146,7 @@ function load(evt) {
 
     // Ask for username 
     last_username = username;
-    username = prompt("What is your name?", last_username);
+    // username = prompt("What is your name?", last_username);
     if(!username) username = "Anonymous";
 
     // reset variable
@@ -154,7 +156,7 @@ function load(evt) {
     score = 0;
     currentLevel = 1;
     cheatmode = false;
-    timeRemain = GAME_INTERVAL;
+    timeRemain = GAMETIMELIMIT;
     gametime = null;
     goodthingLeft = INITIAL_GOOD_NUM;
     canShoot = true;                
@@ -306,6 +308,8 @@ function gamePlay() {
     updateScreen();
     moveBullets();
     collisionDetection();
+    moveMonster();
+    moveMonsterBullet()
 }
 
 //
@@ -330,6 +334,7 @@ function updateScreen() {
 function createMonster(num) {
 
     var monsters = svgdoc.getElementById("monsters");
+    var special = Math.floor(Math.random() * num);
     
     for (var i = 1; i <= num; i++) {
         var monsterx;
@@ -342,10 +347,93 @@ function createMonster(num) {
         }
 
         var monster = svgdoc.createElementNS("http://www.w3.org/2000/svg", "use");
-        monster.setAttribute("x", monsterx);
-        monster.setAttribute("y", monstery);
-        monster.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#monster");
+        monster.setAttribute("x", Math.floor(monsterx));
+        monster.setAttribute("y", Math.floor(monstery));
+        monster.setAttribute("targetY", monstery + 5);
+        monster.setAttribute("special", "false");
+
+        // the monster that can shoot bullet
+        if(i == special) {
+            monster.setAttribute("special",  "true");
+            monsterShootBullet(monster);
+        }
+        
+        if(i % 2){
+            monster.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#monster-left");
+            monster.setAttribute("direction", "left");
+            // random x for monster to move
+            var targetX = Math.floor(Math.random() * (monsterx - 50) + 50);
+            monster.setAttribute("targetX", targetX);
+        } else {
+            monster.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#monster-right");
+            monster.setAttribute("direction", "right");
+            // random x for monster to move
+            var targetX = Math.floor(Math.random() * (SCREEN_SIZE.w - MONSTER_SIZE.w - monsterx) + monsterx);
+            monster.setAttribute("targetX", targetX);
+        }
+
+        var blinking = svgdoc.createElementNS("http://www.w3.org/2000/svg", "animate");
+        blinking.setAttribute("attributeType", "CSS");
+        blinking.setAttribute("attributeName", "opacity");
+        blinking.setAttribute("values", "1;0.5;1");
+        blinking.setAttribute("dur", "1.5s");
+        blinking.setAttribute("repeatCount", "indefinite");
+        monster.appendChild(blinking);
+
         monsters.appendChild(monster);
+    }
+}
+
+function moveMonster(){
+    var monsters = svgdoc.getElementById("monsters");
+    
+    for (var i = 0; i < monsters.childNodes.length; i++) {
+        var monster = monsters.childNodes.item(i);
+        var x = parseInt(monster.getAttribute("x"));
+        var y = parseInt(monster.getAttribute("y"));
+        var direction = monster.getAttribute("direction");
+        var targetX = parseInt(monster.getAttribute("targetX"));
+        var targetY = parseInt(monster.getAttribute("targetY"));
+        
+        // monster reach target position or reach the screen edge -> set a new random x
+        if(x == targetX) {
+            var targetX = Math.floor(Math.random() * (SCREEN_SIZE.w - MONSTER_SIZE.w));
+            monster.setAttribute("targetX", targetX);
+
+            // set the correct direction monster image
+             if (targetX >= x) {   
+                monster.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#monster-right");
+                monster.setAttribute("direction", "right");
+            } else {
+                monster.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#monster-left");
+                monster.setAttribute("direction", "left");
+            }
+
+        } else {
+            // move to the target x
+            if(direction == "right") {
+                monster.setAttribute("x", x + MONSTER_SPEED);
+            } else {
+                monster.setAttribute("x", x - MONSTER_SPEED);
+            }
+        }
+
+        // move monster up and down
+        if(y == targetY) {
+            if(monsterUp) {
+                monster.setAttribute("targetY", y - 10);
+                monsterUp = false;
+            } else {
+                monster.setAttribute("targetY", y + 10);
+                monsterUp = true;
+            }
+        } else {
+            if(monsterUp) {
+            monster.setAttribute("y", parseInt(monster.getAttribute("y")) + 1);
+            } else {
+                monster.setAttribute("y", parseInt(monster.getAttribute("y")) - 1);
+            }
+        }
     }
 }
 
@@ -439,6 +527,63 @@ function shootBullet() {
     }
 }
 
+function monsterShootBullet(monster){
+
+    // Create the bullet by createing a use node
+    var bullet = svgdoc.createElementNS("http://www.w3.org/2000/svg", "use");
+
+    // Calculate and set the position of the bullet
+    var x = parseInt(monster.getAttribute("x")) + MONSTER_SIZE.w/2 - BULLET_SIZE.w/2;
+    var y = parseInt(monster.getAttribute("y")) + MONSTER_SIZE.w/2 - BULLET_SIZE.w/2;
+    var direction = monster.getAttribute("direction");
+    bullet.setAttribute("x", x);
+    bullet.setAttribute("y", y);
+
+    // Set direction of the bullet
+    if (direction == "left") {
+        bullet.setAttribute("motion", shootType.LEFT);
+    } else {
+        bullet.setAttribute("motion", shootType.RIGHT);
+    }
+
+    // Set the href of the use node to the bullet defined in the defs node
+    bullet.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#monsterBullet");
+    svgdoc.getElementById("monsterBullets").appendChild(bullet);
+}
+
+function moveMonsterBullet() {
+    var bullet = svgdoc.getElementById("monsterBullets").childNodes.item(0);
+    
+    if(bullet) {
+        var x = parseInt(bullet.getAttribute("x"));
+        var shotdir = bullet.getAttribute("motion");
+
+        // Update the position of the bullet
+        if (shotdir == shootType.RIGHT) {   
+            bullet.setAttribute("x", x + BULLET_SPEED);
+        } else {
+            bullet.setAttribute("x", x - BULLET_SPEED);
+        }
+
+        // If the bullet is not inside the screen delete it from the group
+        if (x > SCREEN_SIZE.w || x < 0) {
+            svgdoc.getElementById("monsterBullets").removeChild(bullet);
+
+            // shoot a new bullet
+            var monsters = svgdoc.getElementById("monsters");
+            for (var i = 0; i < monsters.childNodes.length; i++) {
+                var monster = monsters.childNodes.item(i);
+                var special = monster.getAttribute("special");
+
+                if(special == "true") {
+                    monsterShootBullet(monster);
+                    continue;
+                }
+            }
+        }
+    }  
+}
+
 function moveBullets() {
     // Go through all bullets
     var bullets = svgdoc.getElementById("bullets");
@@ -523,7 +668,12 @@ function collisionDetection() {
                 j--;
                 monsters.removeChild(monster);
                 i--; 
-                var plusscore = 15;
+                
+                if(monster.getAttribute("special") == "true"){
+                    var plusscore = 25;
+                } else {
+                    var plusscore = 15;
+                }                   
                 updateScore(plusscore);
             }
         }  
@@ -584,7 +734,6 @@ function gameOver(){
     svgdoc.documentElement.removeEventListener("keyup", keyup, false);
 
     setTimeout("showHighScore();", 1000);
-
 }
 
 function showHighScore(){
@@ -611,7 +760,6 @@ function showHighScore(){
 
     // Show the high score table
     showHighScoreTable(table, username);
-
 }
 
 function updateScore(plusscore){

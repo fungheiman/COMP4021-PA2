@@ -12,9 +12,15 @@
       <rect x="20" y="20" width="600" height="560"/>
     </clipPath>
     
-    <pattern id="background_pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-      <rect width="20" height="20" style="fill:yellow"/>
-      <circle cx="10" cy="10" r="8" style="fill:lightyellow"/>
+    <pattern id="background_pattern" x="0" y="0" width="150" height="100" patternUnits="userSpaceOnUse">
+      <rect id="svg_11" height="97.999143" width="149.665357" y="0.00044" x="0.167321" stroke-width="5" stroke="#ffebcd" fill="#ffebcd"/>
+      <line fill-opacity="0" stroke="#fffff0" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_2" y2="6.333718" x2="146.166044" y1="6.333718" x1="114.000018" stroke-width="10" fill="none"/>
+      <line fill-opacity="0" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_3" y2="70.666488" x2="102.166429" y1="3.667075" x1="117.499628" stroke-width="10" stroke="#fffff0" fill="none"/>
+      <line fill-opacity="0" stroke="#fffff0" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_5" y2="67.999844" x2="105.499733" y1="67.666514" x1="16.500512" stroke-width="10" fill="none"/>
+      <line fill-opacity="0" stroke="#fffff0" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_6" y2="44.000054" x2="106.499724" y1="43.666724" x1="19.500485" stroke-width="10" fill="none"/>
+      <line fill-opacity="0" stroke="#fffff0" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_7" y2="20.666926" x2="111.499681" y1="20.333596" x1="22.500459" stroke-width="10" fill="none"/>
+      <ellipse fill-opacity="0" ry="10.333243" rx="10.666573" id="svg_8" cy="84.999696" cx="41.166963" stroke-width="7" stroke="#fffff0" fill="#fffff0"/>
+      <ellipse fill-opacity="0" ry="10.333243" rx="10.666573" id="svg_10" cy="84.999696" cx="85.499908" stroke-width="7" stroke="#fffff0" fill="#fffff0"/>
     </pattern>
     
     <radialGradient id="player_color">
@@ -27,25 +33,36 @@
       <feGaussianBlur stdDeviation="0.5" in="SourceGraphic"/>
     </filter>
 
-    <g id="monster">
-      <path d="M0,30 q0,-30 20,-30 t20,30 l0,10 continue to the next line...
-        l-5,-7 l-5,7 l-5,-7 l-5,7 l-5,-7 l-5,7 l-5,-7 l-5,7 l0,-10"
-        style="fill:gray;fill-opacity:0.5;stroke:black;stroke-width:2"/>
-      <circle cx="12" cy="20" r="5"
-        style="fill:yellow;stroke:black;stroke-width:2">
-        <animate attributeType="css" attributeName="fill" values="yellow;red;yellow"
-          dur="1s" repeatCount="indefinite"/>
-      </circle>
-      <circle cx="28" cy="20" r="5"
-        style="fill:yellow;stroke:black;stroke-width:2">
-         <animate attributeType="css" attributeName="fill" values="yellow;red;yellow"
-          dur="1s" repeatCount="indefinite"/>
-      </circle>
+    <g id="monster-right">
+      <ellipse stroke="#000" transform="rotate(39.07039260864258 28.882099151611325,28.637439727783207) " ry="2.222222" rx="6.745801" id="monster-right-hand" cy="28.637442" cx="28.8821" stroke-opacity="null" fill="#e5e5e5"/>
+      <ellipse stroke="#000" transform="rotate(-39.17099380493164 7.183907985687257,25.823755264282227) " ry="2.222222" rx="7.471265" id="monster-right-hand1" cy="25.823755" cx="7.183908" stroke-opacity="null" fill="#e5e5e5"/>
+      <path stroke="#000" transform="rotate(-179.98095703125 17.46843910217285,20.399623870849606) " id="monster-right-body" d="m21.6925,38.107876c5.981384,-1.980761 9.275066,-6.772753 8.300752,-12.142533c-0.153588,-0.846523 -1.261774,-4.671114 -2.341021,-7.162452c-1.079237,-2.491327 -1.660757,-5.873897 -1.181957,-7.655376c0.4788,-1.781479 0.995915,-3.013618 2.986608,-5.08592c1.990703,-2.072292 5.061474,-2.340148 4.915479,-2.648227c-0.145985,-0.308079 -3.328503,-1.997545 -6.09098,-2.035155c-2.762477,-0.03761 -3.735294,-0.112436 -8.515538,1.602659c-4.780254,1.715104 -10.042249,4.715469 -14.03048,8.722422c-3.988231,4.006952 -4.915468,9.773571 -5.1516,14.812947c-0.236131,5.039376 1.293767,6.646847 2.717747,8.514186c1.42398,1.867339 6.510519,4.460778 10.325918,4.403111c2.226773,-0.033676 5.349323,-0.559901 6.075107,-0.800245l0,0l0,0l0,0l0,0l0,0l0,0l0,0l0,0l0,0l0,0l0,0l-0.078526,-0.00003z" fill="#e5e5e5" stroke-width="1.5"/>
+      <ellipse stroke="#000" ry="5.685094" rx="5.823755" id="svg_4" cy="11.968619" cx="14.243295" fill-opacity="null" stroke-opacity="null" stroke-width="1.5" fill="#fff"/>
+      <ellipse stroke="#000" ry="5.685094" rx="5.823755" id="svg_6" cy="11.891991" cx="25.124521" fill-opacity="null" stroke-opacity="null" stroke-width="1.5" fill="#fff"/>
+      <ellipse stroke="#000" ry="3.366174" rx="3.448276" id="svg_7" cy="12.831599" cx="16.159005" stroke-opacity="null" fill="#000000"/>
+      <ellipse stroke="#000" ry="3.366174" rx="3.448276" id="svg_8" cy="13.061484" cx="22.902299" stroke-opacity="null" fill="#000000"/>
+      <ellipse stroke="#000" transform="rotate(23.656227111816406 18.45785331726072,23.563219070434574) " ry="4.176245" rx="2.528736" id="svg_9" cy="23.563218" cx="18.457854" stroke-opacity="null" fill="#000000"/>
+    </g>
+
+    <g id="monster-left">
+      <ellipse stroke="#000" transform="rotate(11.670816421508789 26.72413635253904,24.061302185058587) " ry="2.222222" rx="7.471265" id="monster-left-hand" cy="24.061303" cx="26.724138" stroke-opacity="null" fill="#e5e5e5"/>
+      <ellipse transform="rotate(-39.17099380493164 6.800765991210945,28.19923400878907) " stroke="#000" ry="2.222222" rx="7.471265" id="monster-left-hand1" cy="28.199234" cx="6.800766" stroke-opacity="null" fill="#e5e5e5"/>
+      <path stroke="#000" transform="rotate(-179.98095703125 17.468151092529293,20.469499588012688) " id="monster-left-body" d="m13.346073,38.177753c-5.83697,-1.980761 -9.05113,-6.772753 -8.10034,-12.142533c0.14988,-0.846523 1.23131,-4.671114 2.2845,-7.162452c1.05318,-2.491327 1.62066,-5.873897 1.15342,-7.655376c-0.46724,-1.781479 -0.97187,-3.013618 -2.9145,-5.08592c-1.94264,-2.072292 -4.93927,-2.340148 -4.7968,-2.648227c0.14246,-0.308079 3.24814,-1.997545 5.94392,-2.035155c2.69578,-0.03761 3.64511,-0.112436 8.30994,1.602659c4.66484,1.715104 9.79979,4.715469 13.69173,8.722422c3.89194,4.006952 4.79679,9.773571 5.02722,14.812947c0.23043,5.039376 -1.26253,6.646847 -2.65213,8.514186c-1.3896,1.867339 -6.35333,4.460778 -10.07661,4.403111c-2.17301,-0.033676 -5.22017,-0.559901 -5.92843,-0.800245l0,0l0,0l0,0l0,0l0,0l0,0l0,0l0,0l0,0l0,0l0,0l0.07663,-0.00003z" fill="#e5e5e5" stroke-width="1.5"/>
+      <ellipse stroke="#000" ry="5.685094" rx="5.823755" id="svg_4" cy="11.662106" cx="9.798851" fill-opacity="null" stroke-opacity="null" stroke-width="1.5" fill="#fff"/>
+      <ellipse stroke="#000" ry="5.685094" rx="5.823755" id="svg_6" cy="11.585477" cx="20.680077" fill-opacity="null" stroke-opacity="null" stroke-width="1.5" fill="#fff"/>
+      <ellipse stroke="#000" ry="3.366174" rx="3.448276" id="svg_7" cy="12.525086" cx="11.71456" stroke-opacity="null" fill="#000000"/>
+      <ellipse stroke="#000" ry="3.366174" rx="3.448276" id="svg_8" cy="12.754971" cx="18.457855" stroke-opacity="null" fill="#000000"/>
+      <ellipse transform="rotate(-10.82060718536377 15.545976638793984,23.793104171752926) " ry="4.176245" rx="2.528736" id="svg_9" cy="23.793103" cx="15.545977" stroke-opacity="null" stroke="#000" fill="#000000"/>
     </g>
 
     <g id="bullet">
-      <circle cx="5" cy="5" r="5" style="fill:red"/>
-      <circle cx="6" cy="3" r="1" style="fill:pink"/>
+      <circle cx="5" cy="5" r="6" style="fill:crimson"/>
+      <circle cx="6" cy="3" r="2" style="fill:lavenderblush"/>
+    </g>
+
+    <g id="monsterBullet">
+      <circle cx="5" cy="5" r="5" style="fill:black"/>
+      <circle cx="6" cy="3" r="1" style="fill:grey"/>
     </g>
 
     <g id="goodthing">
@@ -56,30 +73,30 @@
 
   </defs>
 
-  <rect width="100%" height="100%" style="fill:url(#background_pattern);stroke:orange;stroke-width:4" />
+  <rect width="100%" height="100%" style="fill:url(#background_pattern);stroke:tan;stroke-width:4" />
 
-  <rect x="20" y="20" width="600" height="560" style="fill:black;stroke:red;stroke-width:5" />
+  <rect x="20" y="20" width="600" height="560" style="fill:black;stroke:sandybrown;stroke-width:5" />
   
   <g id="infopanal" transform="translate(620,20)">
     <g id="timer" transform="translate(0,180)">
-      <text x="90" y="0" style="fill:blue;font-size:30px;text-anchor:middle;font-weight:bold;">Time: </text>
-      <text id="timertext" x="90" y="50" style="fill:blue;font-size:30px;text-anchor:middle;font-weight:bold;">60</text>
+      <text x="90" y="0" style="fill:saddlebrown;font-size:30px;text-anchor:middle;font-weight:bold;">Time: </text>
+      <text id="timertext" x="90" y="50" style="fill:chocolate;font-size:30px;text-anchor:middle;font-weight:bold;">60</text>
     </g>
     <g id="bullet" transform="translate(0,290)">
-      <text x="90" y="0" style="fill:blue;font-size:20px;text-anchor:middle;font-weight:bold;">Score: </text>
-      <text id="scoretext" x="90" y="30" style="fill:blue;font-size:20px;text-anchor:middle;font-weight:bold;">0</text>
+      <text x="90" y="0" style="fill:saddlebrown;font-size:20px;text-anchor:middle;font-weight:bold;">Score: </text>
+      <text id="scoretext" x="90" y="30" style="fill:chocolate;font-size:20px;text-anchor:middle;font-weight:bold;">0</text>
     </g>
     <g id="bullet" transform="translate(0,350)">
-      <text x="90" y="0" style="fill:blue;font-size:20px;text-anchor:middle;font-weight:bold;">Bullet Left: </text>
-      <text id="bullettext" x="90" y="30" style="fill:blue;font-size:20px;text-anchor:middle;font-weight:bold;">8</text>
+      <text x="90" y="0" style="fill:saddlebrown;font-size:20px;text-anchor:middle;font-weight:bold;">Bullet Left: </text>
+      <text id="bullettext" x="90" y="30" style="fill:chocolate;font-size:20px;text-anchor:middle;font-weight:bold;">8</text>
     </g>
     <g id="bullet" transform="translate(0,410)">
-      <text x="90" y="0" style="fill:blue;font-size:20px;text-anchor:middle;font-weight:bold;">Level: </text>
-      <text id="leveltext" x="90" y="30" style="fill:blue;font-size:20px;text-anchor:middle;font-weight:bold;">1</text>
+      <text x="90" y="0" style="fill:saddlebrown;font-size:20px;text-anchor:middle;font-weight:bold;">Level: </text>
+      <text id="leveltext" x="90" y="30" style="fill:chocolate;font-size:20px;text-anchor:middle;font-weight:bold;">1</text>
     </g>
     <g id="cheatmode" transform="translate(0,470)">
-      <text x="90" y="0" style="fill:blue;font-size:20px;text-anchor:middle;font-weight:bold;">Cheat Mode: </text>
-      <text id="cheatmodetext" x="90" y="30" style="fill:blue;font-size:20px;text-anchor:middle;font-weight:bold;">OFF</text>
+      <text x="90" y="0" style="fill:saddlebrown;font-size:20px;text-anchor:middle;font-weight:bold;">Cheat Mode: </text>
+      <text id="cheatmodetext" x="90" y="30" style="fill:chocolate;font-size:20px;text-anchor:middle;font-weight:bold;">OFF</text>
     </g>
   </g>
 
@@ -89,51 +106,51 @@
         <rect x="0" y="0" width="600" height="560" style="fill:white" />
 
         <g id="platforms">
-          <rect x="0" y="540" width="600" height="20" style="fill:red"/>
-          <rect x="0" y="520" width="40" height="20" style="fill:red"/>
+          <rect x="0" y="540" width="600" height="20" style="fill:cadetblue"/>
+          <rect x="0" y="520" width="40" height="20" style="fill:cadetblue"/>
 
-          <rect x="260" y="520" width="100" height="20" style="fill:red"/>
-          <rect x="280" y="500" width="60" height="20" style="fill:red"/>
-          <rect x="300" y="480" width="20" height="40" style="fill:red"/>
+          <rect x="260" y="520" width="100" height="20" style="fill:cadetblue"/>
+          <rect x="280" y="500" width="60" height="20" style="fill:cadetblue"/>
+          <rect x="300" y="480" width="20" height="40" style="fill:cadetblue"/>
 
-          <rect x="420" y="500" width="40" height="40" style="fill:red"/>
+          <rect x="420" y="500" width="40" height="40" style="fill:cadetblue"/>
 
-          <rect x="120" y="440" width="60" height="20" style="fill:red"/>
-          <rect x="100" y="420" width="160" height="20" style="fill:red"/>
-          <rect x="60" y="400" width="140" height="20" style="fill:red"/>
-          <rect x="100" y="380" width="60" height="20" style="fill:red"/>
-          <rect x="80" y="360" width="100" height="20" style="fill:red"/>
-          <rect x="120" y="340" width="40" height="20" style="fill:red"/>
+          <rect x="120" y="440" width="60" height="20" style="fill:cadetblue"/>
+          <rect x="100" y="420" width="160" height="20" style="fill:cadetblue"/>
+          <rect x="60" y="400" width="140" height="20" style="fill:cadetblue"/>
+          <rect x="100" y="380" width="60" height="20" style="fill:cadetblue"/>
+          <rect x="80" y="360" width="100" height="20" style="fill:cadetblue"/>
+          <rect x="120" y="340" width="40" height="20" style="fill:cadetblue"/>
 
-          <rect x="360" y="440" width="80" height="20" style="fill:red"/>
-          <rect x="400" y="420" width="100" height="20" style="fill:red"/>
-          <rect x="440" y="400" width="20" height="20" style="fill:red"/>
+          <rect x="360" y="440" width="80" height="20" style="fill:cadetblue"/>
+          <rect x="400" y="420" width="100" height="20" style="fill:cadetblue"/>
+          <rect x="440" y="400" width="20" height="20" style="fill:cadetblue"/>
 
-          <rect x="500" y="480" width="60" height="20" style="fill:red"/>
-          <rect x="540" y="460" width="60" height="20" style="fill:red"/>
-          <rect x="580" y="440" width="20" height="20" style="fill:red"/>
+          <rect x="500" y="480" width="60" height="20" style="fill:cadetblue"/>
+          <rect x="540" y="460" width="60" height="20" style="fill:cadetblue"/>
+          <rect x="580" y="440" width="20" height="20" style="fill:cadetblue"/>
 
-          <rect x="300" y="340" width="120" height="20" style="fill:red"/>
-          <rect x="260" y="320" width="100" height="20" style="fill:red"/>
-          <rect x="220" y="300" width="80" height="20" style="fill:red"/>
+          <rect x="300" y="340" width="120" height="20" style="fill:cadetblue"/>
+          <rect x="260" y="320" width="100" height="20" style="fill:cadetblue"/>
+          <rect x="220" y="300" width="80" height="20" style="fill:cadetblue"/>
 
-          <rect x="40" y="260" width="80" height="20" style="fill:red"/>
-          <rect x="80" y="240" width="100" height="20" style="fill:red"/>
-          <rect x="120" y="220" width="40" height="20" style="fill:red"/>
-          <rect x="140" y="200" width="20" height="20" style="fill:red"/>
+          <rect x="40" y="260" width="80" height="20" style="fill:cadetblue"/>
+          <rect x="80" y="240" width="100" height="20" style="fill:cadetblue"/>
+          <rect x="120" y="220" width="40" height="20" style="fill:cadetblue"/>
+          <rect x="140" y="200" width="20" height="20" style="fill:cadetblue"/>
 
-          <rect x="440" y="260" width="160" height="20" style="fill:red"/>
-          <rect x="500" y="240" width="120" height="20" style="fill:red"/>
-          <rect x="540" y="220" width="80" height="20" style="fill:red"/>
+          <rect x="440" y="260" width="160" height="20" style="fill:cadetblue"/>
+          <rect x="500" y="240" width="120" height="20" style="fill:cadetblue"/>
+          <rect x="540" y="220" width="80" height="20" style="fill:cadetblue"/>
 
-          <rect x="40" y="140" width="60" height="20" style="fill:red"/>
+          <rect x="40" y="140" width="60" height="20" style="fill:cadetblue"/>
 
-          <rect x="200" y="140" width="320" height="20" style="fill:red"/>
-          <rect x="260" y="120" width="200" height="20" style="fill:red"/>
-          <rect x="300" y="80" width="40" height="40" style="fill:red"/>
-          <rect x="120" y="60" width="200" height="20" style="fill:red"/>
+          <rect x="200" y="140" width="320" height="20" style="fill:cadetblue"/>
+          <rect x="260" y="120" width="200" height="20" style="fill:cadetblue"/>
+          <rect x="300" y="80" width="40" height="40" style="fill:cadetblue"/>
+          <rect x="120" y="60" width="200" height="20" style="fill:cadetblue"/>
 
-          <rect x="420" y="40" width="180" height="20" style="fill:red"/>
+          <rect x="420" y="40" width="180" height="20" style="fill:cadetblue"/>
         </g>
 
         <g id="exit" transform="translate(560,0)">
@@ -159,19 +176,36 @@
 
         <g id="monsters"/>
 
+        <g id="monsterBullets"/>
+
         <g id="bullets"/>
 
         <g id="goodthings"/>
 
-        <g id="startpopup" transform="translate(100,80)">
-          <rect x="0" y="0" width="400" height="400" style="fill:white;stroke:slateblue;stroke-width:2"/>
-          <text x="200" y="200"
-            style="fill:slateblue;font-size:40px;text-anchor:middle" cursor="pointer">FUCK YOU BITCH</text>
+        <g id="startpopup" transform="translate(100,70)">
+          <rect x="0" y="0" width="400" height="425" style="fill:white;fill-opacity:0.9;stroke:rebeccapurple;stroke-width:2;stroke-dasharray:5;"/>
+          <text x="200" y="40"
+            style="fill:darkmagenta;font-size:22px;font-weight:bold;text-anchor:middle;font-family:papyrus">Ecsape From Ghost Shopping Mall</text>
+          <text x="200" y="75" style="fill:darkslateblue;font-size:18px;text-anchor:middle;font-family:palatino">You are shopping in a mall. You need to collect </text>
+          <text x="200" y="100" style="fill:darkslateblue;font-size:18px;text-anchor:middle;font-family:palatino">all <tspan style="fill:mediumvioletred;font-style:italic">money</tspan> in order to buy your favourite.</text>
+          <text x="200" y="125" style="fill:darkslateblue;font-size:18px;text-anchor:middle;font-family:palatino">Use the <tspan style="fill:mediumvioletred;font-style:italic">N</tspan> key to go left or <tspan style="fill:mediumvioletred;font-style:italic">M</tspan> key to go right and</text>
+          <text x="200" y="150" style="fill:darkslateblue;font-size:18px;text-anchor:middle;font-family:palatino">the <tspan style="fill:mediumvioletred;font-style:italic">Z</tspan> key to jump.</text>
+          
+          <text x="200" y="180" style="fill:darkslateblue;font-size:18px;text-anchor:middle;font-family:palatino">However, there are some ghosts chasing after</text> 
+          <text x="200" y="205" style="fill:darkslateblue;font-size:18px;text-anchor:middle;font-family:palatino">you. You will die if you touch them. Shoot and</text>
+          <text x="200" y="230" style="fill:darkslateblue;font-size:18px;text-anchor:middle;font-family:palatino">kill them by the <tspan style="fill:mediumvioletred;font-style:italic">spacebar</tspan>.</text>
+          <text x="200" y="260" style="fill:darkslateblue;font-size:18px;text-anchor:middle;font-family:palatino">Pick all the monry <tspan style="fill:mediumvioletred;font-style:italic">as fast as you can</tspan> and go to </text>
+          <text x="200" y="285" style="fill:darkslateblue;font-size:18px;text-anchor:middle;font-family:palatino">the exit. Time left will be added to your score.</text>
 
-            <g transform="translate(150,350)" cursor="pointer" onclick="top.startonclick()">
-              <rect x="0" y="0" width="100" height="30" style="fill:white;stroke:blue;stroke-width:2"/>
-              <text x="50" y="20" style="fill:blue;font-size:15px;text-anchor:middle;font-weight:bold;">Start</text>
-            </g>
+          <text x="200" y="330" style="fill:crimson;font-size:20px;text-anchor:middle;font-family:palatino">SO, START ESCAPING NOW!</text>
+
+          <g transform="translate(150,350)" cursor="pointer" onclick="top.startonclick()">
+            <rect x="0" y="0" width="100" height="30" style="fill:white;stroke:navy;stroke-width:2"/>
+            <text x="50" y="20" style="fill:navy;font-size:17px;font-family:papyrus;text-anchor:middle;font-weight:bold;">Start</text>
+          </g>
+
+          <text x="310" y="415" style="fill:darkslateblue;font-size:15px;text-anchor:middle;font-family:palatino">Fung Hei Man 20189503</text>
+
         </g>
 
         <g id="levelpopup" transform="translate(100,210)" style="visibility:hidden">
