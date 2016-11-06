@@ -92,7 +92,8 @@ Player.prototype.collideScreen = function(position) {
 var PLAYER_SIZE = new Size(40, 40);         // The size of the player
 var MONSTER_SIZE = new Size(35, 40);        // The size of a monster
 var SCREEN_SIZE = new Size(600, 560);       // The size of the game screen
-var BULLET_SIZE = new Size(10, 10);         // The size of a bullet
+var BULLET_SIZE = new Size(12, 12);
+var MONSTER_BULLET_SIZE = new Size(10, 10); // The size of a bullet
 var GOODTHINGD_SIZE = new Size(50, 38);     // The size of the good thing
 var PLAYER_INIT_POS  = new Point(0, 0);     // The initial position of the player
 
@@ -161,6 +162,8 @@ function load(evt) {
     goodthingLeft = INITIAL_GOOD_NUM;
     canShoot = true;                
     bulletLeft = MAXBULLET;
+
+
 }
 
 function startonclick(){
@@ -176,6 +179,10 @@ function startonclick(){
 
     // Create the player
     player = new Player();
+    // set the player svg
+    var playersvg = svgdoc.createElementNS("http://www.w3.org/2000/svg", "use");
+    playersvg.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#player-right");
+    player.node.appendChild(playersvg);
 
     // Create Monsters
     createMonster(INITIAL_MONSTER_NUM);
@@ -243,7 +250,6 @@ function keydown(evt) {
             break;
     }
 }
-
 
 //
 // This is the keyup handling function for the SVG document
@@ -318,16 +324,15 @@ function gamePlay() {
 // the position of the player
 //
 function updateScreen() {
+
+    if (player.currentDir == motionType.LEFT) {
+        player.node.childNodes.item(0).setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#player-left");
+    } else {
+        player.node.childNodes.item(0).setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#player-right");
+    }
+
     // Transform the player
     player.node.setAttribute("transform", "translate(" + player.position.x + "," + player.position.y + ")");
-            
-    // Calculate the scaling and translation factors	
-    if(zoom != 1.0) {
-        var gamearea = svgdoc.getElementById("gamearea");
-        var tx = player.position.x + PLAYER_SIZE.w/2;
-        var ty = player.position.y + PLAYER_SIZE.h/2; 
-        gamearea.setAttribute("transform", "translate(" + tx + "," + ty + ") scale( " + zoom + ")");
-    }    
 }
 
 // This function creates monster
@@ -614,8 +619,18 @@ function collisionDetection() {
     var bullets = svgdoc.getElementById("bullets");
     var goodthings = svgdoc.getElementById("goodthings");
     
-    // Check whether the player collides with a monster
+    // Check whether the player collides with a monster / monster's bullet
     if(!cheatmode) {
+        var monsterBullet = svgdoc.getElementById("monsterBullets").childNodes.item(0);
+        var x = parseFloat(monsterBullet.getAttribute("x"));
+        var y = parseFloat(monsterBullet.getAttribute("y"));
+        var monsterBulletPos = new Point(x, y);
+
+        var monsterOverlap = intersect(monsterBulletPos, MONSTER_BULLET_SIZE, player.position, PLAYER_SIZE);
+        if(monsterOverlap) {
+            gameOver();
+        }
+
         for (var i = 0; i < monsters.childNodes.length; i++) {
             var monster = monsters.childNodes.item(i);
             var x = parseFloat(monster.getAttribute("x"));
@@ -722,7 +737,7 @@ function gameOver(){
     svgdoc.getElementById("endgame").style.visibility = "";
     
     var timertext = svgdoc.getElementById("timertext")
-        timertext.setAttribute("style", "fill:blue;font-size:30px;text-anchor:middle;font-weight:bold;");
+        timertext.setAttribute("style", "fill:chocolate;font-size:30px;text-anchor:middle;font-weight:bold;");
     var blinking = svgdoc.getElementById("timerblinking");
         if(blinking) timertext.removeChild(blinking);
     
@@ -778,11 +793,12 @@ function finishLevel(){
     cleanUpGroup("monsters");
     cleanUpGroup("bullets");
     cleanUpGroup("goodthings");
+    cleanUpGroup("monsterBullets");
 
     // reset timer
     clearTimeout(gametimer);
     var timertext = svgdoc.getElementById("timertext")
-        timertext.setAttribute("style", "fill:blue;font-size:30px;text-anchor:middle;font-weight:bold;");
+        timertext.setAttribute("style", "fill:chocolate;font-size:30px;text-anchor:middle;font-weight:bold;");
     var blinking = svgdoc.getElementById("timerblinking");
         if(blinking) timertext.removeChild(blinking);
     
