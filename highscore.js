@@ -94,7 +94,7 @@ function showHighScoreTable(table, currentName) {
     // Get the high score text node
     var node = svgdoc.getElementById("highscoretext");
     
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 5; i++) {
         // If i is more than the length of the high score table exit
         // from the for loop
         if (i >= table.length) break;

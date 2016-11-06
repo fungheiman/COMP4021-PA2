@@ -89,8 +89,6 @@
         <rect x="0" y="0" width="600" height="560" style="fill:white" />
 
         <g id="platforms">
-
-          <!-- Add your platforms here -->
           <rect x="0" y="540" width="600" height="20" style="fill:red"/>
           <rect x="0" y="520" width="40" height="20" style="fill:red"/>
 

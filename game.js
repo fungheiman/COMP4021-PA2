@@ -349,7 +349,25 @@ function createMonster(num) {
     }
 }
 
+function goodThingCollidePlatform(goodthingPos){
+    var platforms = svgdoc.getElementById("platforms");
+    for (var i = 0; i < platforms.childNodes.length; i++) {
+        var node = platforms.childNodes.item(i);
+        if (node.nodeName != "rect") continue;
 
+        var x = parseFloat(node.getAttribute("x"));
+        var y = parseFloat(node.getAttribute("y"));
+        var w = parseFloat(node.getAttribute("width"));
+        var h = parseFloat(node.getAttribute("height"));
+        var pos = new Point(x, y);
+        var size = new Size(w, h);
+
+        if (intersect(goodthingPos, GOODTHINGD_SIZE, pos, size)) {
+            return true;
+        }
+    }
+    return false;
+}
 
 // This function creates monster
 function creatGoodThings(num) {
@@ -366,11 +384,21 @@ function creatGoodThings(num) {
             goodthingx = Math.random() * (SCREEN_SIZE.w - 150) + 50;
         }
 
-        var goodthing = svgdoc.createElementNS("http://www.w3.org/2000/svg", "use");
-        goodthing.setAttribute("x", goodthingx);
-        goodthing.setAttribute("y", goodthingy);
-        goodthing.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#goodthing");
-        goodthings.appendChild(goodthing);
+        var goodThingPos = new Point(goodthingx, goodthingy);
+
+        if(!goodThingCollidePlatform(goodThingPos)){
+            // if do not collide, add the good thing
+            var goodthing = svgdoc.createElementNS("http://www.w3.org/2000/svg", "use");
+            goodthing.setAttribute("x", goodthingx);
+            goodthing.setAttribute("y", goodthingy);
+            goodthing.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#goodthing");
+            goodthings.appendChild(goodthing);
+        } else {
+            // if collide, compute coordinate again
+            --i;
+        }
+
+       
     }
 }
 
