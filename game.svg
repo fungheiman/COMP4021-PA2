@@ -211,6 +211,10 @@
 
         <g id="player"/>
 
+        <g id="playerName">
+          <text id="nameText" style="fill:darkslategray;font-size:12px;text-anchor:middle">Anonymous</text>
+        </g>
+
         <g id="monsters"/>
 
         <g id="monsterBullets"/>
@@ -228,11 +232,11 @@
           <text x="200" y="125" style="fill:darkslateblue;font-size:18px;text-anchor:middle;font-family:palatino">Use the <tspan style="fill:mediumvioletred;font-style:italic">N</tspan> key to go left or <tspan style="fill:mediumvioletred;font-style:italic">M</tspan> key to go right and</text>
           <text x="200" y="150" style="fill:darkslateblue;font-size:18px;text-anchor:middle;font-family:palatino">the <tspan style="fill:mediumvioletred;font-style:italic">Z</tspan> key to jump.</text>
           
-          <text x="200" y="180" style="fill:darkslateblue;font-size:18px;text-anchor:middle;font-family:palatino">However, there are some ghosts chasing after</text> 
+          <text x="200" y="180" style="fill:darkslateblue;font-size:18px;text-anchor:middle;font-family:palatino">Suddenly, there are some ghosts chasing after</text> 
           <text x="200" y="205" style="fill:darkslateblue;font-size:18px;text-anchor:middle;font-family:palatino">you. You will die if you touch them. Shoot and</text>
           <text x="200" y="230" style="fill:darkslateblue;font-size:18px;text-anchor:middle;font-family:palatino">kill them by the <tspan style="fill:mediumvioletred;font-style:italic">spacebar</tspan>.</text>
-          <text x="200" y="260" style="fill:darkslateblue;font-size:18px;text-anchor:middle;font-family:palatino">Pick all the monry <tspan style="fill:mediumvioletred;font-style:italic">as fast as you can</tspan> and go to </text>
-          <text x="200" y="285" style="fill:darkslateblue;font-size:18px;text-anchor:middle;font-family:palatino">the exit. Time left will be added to your score.</text>
+          <text x="200" y="260" style="fill:darkslateblue;font-size:18px;text-anchor:middle;font-family:palatino">Pick all the money <tspan style="fill:mediumvioletred;font-style:italic">as fast as you can and go to </tspan></text>
+          <text x="200" y="285" style="fill:darkslateblue;font-size:18px;text-anchor:middle;font-family:palatino"><tspan style="fill:mediumvioletred;font-style:italic">the exit.</tspan> Time left will be added to your score.</text>
 
           <text x="200" y="330" style="fill:crimson;font-size:20px;text-anchor:middle;font-family:palatino">SO, START ESCAPING NOW!</text>
 
@@ -242,18 +246,17 @@
           </g>
 
           <text x="310" y="415" style="fill:darkslateblue;font-size:15px;text-anchor:middle;font-family:palatino">Fung Hei Man 20189503</text>
-
         </g>
 
         <g id="levelpopup" transform="translate(100,210)" style="visibility:hidden">
-          <rect x="0" y="0" width="400" height="100" style=" fill:white;stroke:seagreen;stroke-width:2"/>
+          <rect x="0" y="0" width="400" height="100" style="fill:white;stroke:seagreen;stroke-width:2"/>
           <text id="levelpopuptext" x="200" y="65" style="fill:seagreen;font-size:40px;text-anchor:middle"/>
         </g>
 
         <g id="endgame" transform="translate(100,200)" style="visibility:hidden">
           <rect x="0" y="0" width="400" height="150" style="fill:white;stroke:red;stroke-width:2"/>
           <text x="200" y="90"
-            style="fill:red;font-size:40px;text-anchor:middle" cursor="pointer">YOU LOSE BITCH</text>             
+            style="fill:red;font-size:40px;text-anchor:middle" cursor="pointer">You Lose !!! :(</text>             
         </g>
       </g>  <!--gamearea-->
 

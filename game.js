@@ -95,7 +95,8 @@ var SCREEN_SIZE = new Size(600, 560);       // The size of the game screen
 var BULLET_SIZE = new Size(12, 12);
 var MONSTER_BULLET_SIZE = new Size(10, 10); // The size of a bullet
 var GOODTHINGD_SIZE = new Size(50, 38);     // The size of the good thing
-var PLAYER_INIT_POS  = new Point(0, 0);     // The initial position of the player
+var PLAYER_INIT_POS  = new Point(0, 20);     // The initial position of the player
+var NAMETAG_INIT_POS  = new Point(0, 0);      
 
 var MOVE_DISPLACEMENT = 5;                  // The speed of the player in motion
 var JUMP_SPEED = 15;                        // The speed of the player jumping
@@ -147,8 +148,15 @@ function load(evt) {
 
     // Ask for username 
     last_username = username;
-    // username = prompt("What is your name?", last_username);
+    if(last_username != "Anonymous") {
+        username = prompt("What is your name?", last_username);
+    } else {
+        username = prompt("What is your name?");
+    }
+    
     if(!username) username = "Anonymous";
+
+    svgdoc.getElementById("nameText").textContent = username;
 
     // reset variable
     player = null;                          
@@ -162,7 +170,7 @@ function load(evt) {
     goodthingLeft = INITIAL_GOOD_NUM;
     canShoot = true;                
     bulletLeft = MAXBULLET;
-
+    monsterUp = true;
 
 }
 
@@ -333,6 +341,11 @@ function updateScreen() {
 
     // Transform the player
     player.node.setAttribute("transform", "translate(" + player.position.x + "," + player.position.y + ")");
+
+    // Transform the play name name
+    var namex = player.position.x + PLAYER_SIZE.w/2;
+    var namey = player.position.y - 5;
+    svgdoc.getElementById("nameText").setAttribute("transform", "translate(" + namex + "," + namey + ")");
 }
 
 // This function creates monster
@@ -823,6 +836,7 @@ function startNewLevel(){
     bulletLeft = MAXBULLET;
     canShoot = true;
     timeRemain = GAMETIMELIMIT;
+    monsterUp = true;
     svgdoc.documentElement.addEventListener("keydown", keydown, false);
     svgdoc.documentElement.addEventListener("keyup", keyup, false);
 
