@@ -148,51 +148,51 @@
         <rect x="0" y="0" width="600" height="560" style="fill:white" />
 
         <g id="platforms">
-          <rect x="0" y="540" width="600" height="20" style="fill:cadetblue"/>
-          <rect x="0" y="520" width="40" height="20" style="fill:cadetblue"/>
+          <rect x="0" y="540" width="600" height="20" style="fill:cadetblue" disappear="false"/>
+          <rect x="0" y="520" width="40" height="20" style="fill:cadetblue" disappear="false"/>
 
-          <rect x="260" y="520" width="100" height="20" style="fill:cadetblue"/>
-          <rect x="280" y="500" width="60" height="20" style="fill:cadetblue"/>
-          <rect x="300" y="480" width="20" height="40" style="fill:cadetblue"/>
+          <rect x="260" y="520" width="100" height="20" style="fill:cadetblue" disappear="false"/>
+          <rect x="280" y="500" width="60" height="20" style="fill:cadetblue" disappear="false"/>
+          <rect x="300" y="480" width="20" height="40" style="fill:cadetblue" disappear="false"/>
 
-          <rect x="420" y="500" width="40" height="40" style="fill:cadetblue"/>
+          <rect x="420" y="500" width="40" height="40" style="fill:cadetblue" disappear="false"/>
 
-          <rect x="120" y="440" width="60" height="20" style="fill:cadetblue"/>
-          <rect x="100" y="420" width="160" height="20" style="fill:cadetblue"/>
-          <rect x="60" y="400" width="140" height="20" style="fill:cadetblue"/>
-          <rect x="100" y="380" width="60" height="20" style="fill:cadetblue"/>
-          <rect x="80" y="360" width="100" height="20" style="fill:cadetblue"/>
-          <rect x="120" y="340" width="40" height="20" style="fill:cadetblue"/>
+          <rect x="120" y="440" width="60" height="20" style="fill:cadetblue" disappear="false"/>
+          <rect x="100" y="420" width="160" height="20" style="fill:cadetblue" disappear="false"/>
+          <rect x="60" y="400" width="140" height="20" style="fill:cadetblue" disappear="false"/>
+          <rect x="100" y="380" width="60" height="20" style="fill:cadetblue" disappear="false"/>
+          <rect x="80" y="360" width="100" height="20" style="fill:cadetblue" disappear="false"/>
+          <rect x="120" y="340" width="40" height="20" style="fill:cadetblue" disappear="false"/>
 
-          <rect x="360" y="440" width="80" height="20" style="fill:cadetblue"/>
-          <rect x="400" y="420" width="100" height="20" style="fill:cadetblue"/>
-          <rect x="440" y="400" width="20" height="20" style="fill:cadetblue"/>
+          <rect x="360" y="440" width="80" height="20" style="fill:cadetblue" disappear="false"/>
+          <rect x="400" y="420" width="100" height="20" style="fill:cadetblue" disappear="false"/>
+          <rect x="440" y="400" width="20" height="20" style="fill:cadetblue" disappear="false"/>
 
-          <rect x="500" y="480" width="60" height="20" style="fill:cadetblue"/>
-          <rect x="540" y="460" width="60" height="20" style="fill:cadetblue"/>
-          <rect x="580" y="440" width="20" height="20" style="fill:cadetblue"/>
+          <rect x="500" y="480" width="60" height="20" style="fill:cadetblue" disappear="false"/>
+          <rect x="540" y="460" width="60" height="20" style="fill:cadetblue" disappear="false"/>
+          <rect x="580" y="440" width="20" height="20" style="fill:cadetblue" disappear="false"/>
 
-          <rect x="300" y="340" width="120" height="20" style="fill:cadetblue"/>
-          <rect x="260" y="320" width="100" height="20" style="fill:cadetblue"/>
-          <rect x="220" y="300" width="80" height="20" style="fill:cadetblue"/>
+          <rect x="300" y="340" width="120" height="20" style="fill:cadetblue" disappear="false"/>
+          <rect x="260" y="320" width="100" height="20" style="fill:cadetblue" disappear="false"/>
+          <rect x="220" y="300" width="80" height="20" style="fill:lightseagreen" disappear="true" touched="false" delete="false"/>
 
-          <rect x="40" y="260" width="80" height="20" style="fill:cadetblue"/>
-          <rect x="80" y="240" width="100" height="20" style="fill:cadetblue"/>
-          <rect x="120" y="220" width="40" height="20" style="fill:cadetblue"/>
-          <rect x="140" y="200" width="20" height="20" style="fill:cadetblue"/>
+          <rect x="40" y="260" width="80" height="20" style="fill:cadetblue" disappear="false"/>
+          <rect x="80" y="240" width="100" height="20" style="fill:cadetblue" disappear="false"/>
+          <rect x="120" y="220" width="40" height="20" style="fill:cadetblue" disappear="false"/>
+          <rect x="140" y="200" width="20" height="20" style="fill:lightseagreen" disappear="true" touched="false" delete="false"/>
 
-          <rect x="440" y="260" width="160" height="20" style="fill:cadetblue"/>
-          <rect x="500" y="240" width="120" height="20" style="fill:cadetblue"/>
-          <rect x="540" y="220" width="80" height="20" style="fill:cadetblue"/>
+          <rect x="440" y="260" width="160" height="20" style="fill:cadetblue" disappear="false"/>
+          <rect x="500" y="240" width="120" height="20" style="fill:cadetblue" disappear="false"/>
+          <rect x="540" y="220" width="80" height="20" style="fill:cadetblue" disappear="false"/>
 
-          <rect x="40" y="140" width="60" height="20" style="fill:cadetblue"/>
+          <rect id="movingPlatform" x="40" y="140" width="80" height="20" style="fill:cadetblue" lowY="200" highY="60"/>
 
-          <rect x="200" y="140" width="320" height="20" style="fill:cadetblue"/>
-          <rect x="260" y="120" width="200" height="20" style="fill:cadetblue"/>
-          <rect x="300" y="80" width="40" height="40" style="fill:cadetblue"/>
-          <rect x="120" y="60" width="200" height="20" style="fill:cadetblue"/>
+          <rect x="200" y="140" width="320" height="20" style="fill:lightseagreen" disappear="true" touched="false" delete="false"/>
+          <rect x="260" y="120" width="200" height="20" style="fill:cadetblue" disappear="false"/>
+          <rect x="300" y="80" width="40" height="40" style="fill:cadetblue" disappear="false"/>
+          <rect x="120" y="60" width="200" height="20" style="fill:cadetblue" disappear="false"/>
 
-          <rect x="420" y="40" width="180" height="20" style="fill:cadetblue"/>
+          <rect x="420" y="40" width="180" height="20" style="fill:cadetblue" disappear="false"/>
         </g>
 
         <g id="exit" transform="translate(560,0)">
@@ -223,7 +223,7 @@
 
         <g id="goodthings"/>
 
-        <g id="startpopup" transform="translate(100,70)">
+        <g id="startpopup" transform="translate(100,70)" style="visibility:hidden">
           <rect x="0" y="0" width="400" height="425" style="fill:white;fill-opacity:0.9;stroke:rebeccapurple;stroke-width:2;stroke-dasharray:5;"/>
           <text x="200" y="40"
             style="fill:darkmagenta;font-size:22px;font-weight:bold;text-anchor:middle;font-family:papyrus">Ecsape From Ghost Shopping Mall</text>

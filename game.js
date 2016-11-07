@@ -27,6 +27,7 @@ function Player() {
 
 Player.prototype.isOnPlatform = function() {
     var platforms = svgdoc.getElementById("platforms");
+
     for (var i = 0; i < platforms.childNodes.length; i++) {
         var node = platforms.childNodes.item(i);
         if (node.nodeName != "rect") continue;
@@ -37,12 +38,40 @@ Player.prototype.isOnPlatform = function() {
         var h = parseFloat(node.getAttribute("height"));
 
         if (((this.position.x + PLAYER_SIZE.w > x && this.position.x < x + w) ||
-             ((this.position.x + PLAYER_SIZE.w) == x && this.motion == motionType.RIGHT) ||
-             (this.position.x == (x + w) && this.motion == motionType.LEFT)) &&
-            this.position.y + PLAYER_SIZE.h == y) return true;
-    }
-    if (this.position.y + PLAYER_SIZE.h == SCREEN_SIZE.h) return true;
+            ((this.position.x + PLAYER_SIZE.w) == x && this.motion == motionType.RIGHT) ||
+            (this.position.x == (x + w) && this.motion == motionType.LEFT)) &&
+            this.position.y + PLAYER_SIZE.h == y) {
 
+            var disappear = node.getAttribute("disappear");
+            var touched = node.getAttribute("touched");
+
+            if(disappear == "true" && touched == "false") {
+                node.setAttribute("touched", "true");
+                touchedPlatform = i;
+                onPlatformTimer = setTimeout(function(){ node.setAttribute("delete", "true"); }, 500);
+                setTimeout("platformDisappear()", 700);
+                setTimeout("deletePlatform()", 5000);
+            }
+
+            if(disappear == "false") {
+                platforms.childNodes.item(touchedPlatform).setAttribute("touched", "false");
+                touchedPlatform = null;
+                clearTimeout(onPlatformTimer);
+            }
+            
+            return true;
+        } 
+    }
+    if (this.position.y + PLAYER_SIZE.h == SCREEN_SIZE.h) {
+        platforms.childNodes.item(touchedPlatform).setAttribute("touched", "false");
+        touchedPlatform = null;
+        clearTimeout(onPlatformTimer);
+        return true;
+    }
+
+    platforms.childNodes.item(touchedPlatform).setAttribute("touched", "false");
+    touchedPlatform = null;
+    clearTimeout(onPlatformTimer);
     return false;
 }
 
@@ -108,9 +137,9 @@ var GAME_INTERVAL = 25;                     // The time interval of running the 
 var SHOOT_INTERVAL = 200.0;                 // The period when shooting is disabled
 var GAMETIMELIMIT = 60;
 var MAXBULLET = 8;
-var INITIAL_MONSTER_NUM = 6;
+var INITIAL_MONSTER_NUM = 0;
 var MONSTER_INCREMENT = 4;
-var INITIAL_GOOD_NUM = 2;
+var INITIAL_GOOD_NUM = 0;
 var GOOD_INCREMENT = 1;
 
 //
@@ -131,6 +160,9 @@ var goodthingLeft = INITIAL_GOOD_NUM;
 var username = "Anonymous";
 var last_username = username;
 var monsterUp = true;
+var platformUp = true;
+var onPlatformTimer = null;
+var touchedPlatform = null;
 
 //
 // Variables for bullets
@@ -148,11 +180,11 @@ function load(evt) {
 
     // Ask for username 
     last_username = username;
-    if(last_username != "Anonymous") {
-        username = prompt("What is your name?", last_username);
-    } else {
-        username = prompt("What is your name?");
-    }
+    // if(last_username != "Anonymous") {
+    //     username = prompt("What is your name?", last_username);
+    // } else {
+    //     username = prompt("What is your name?");
+    // }
     
     if(!username) username = "Anonymous";
 
@@ -171,7 +203,10 @@ function load(evt) {
     canShoot = true;                
     bulletLeft = MAXBULLET;
     monsterUp = true;
+    platformUp = true;
+    touchedPlatform = null;
 
+    startonclick();
 }
 
 function startonclick(){
@@ -200,6 +235,7 @@ function startonclick(){
     // Start the game interval
     gameInterval = setInterval("gamePlay()", GAME_INTERVAL);
     gameTimeCountDown();
+    
 }
 
 //
@@ -323,7 +359,8 @@ function gamePlay() {
     moveBullets();
     collisionDetection();
     moveMonster();
-    moveMonsterBullet()
+    moveMonsterBullet();
+    movePlatform();
 }
 
 //
@@ -352,7 +389,7 @@ function updateScreen() {
 function createMonster(num) {
 
     var monsters = svgdoc.getElementById("monsters");
-    var special = Math.floor(Math.random() * num);
+    var special = Math.floor(Math.random() * (num-1)) + 1;
     
     for (var i = 1; i <= num; i++) {
         var monsterx;
@@ -451,6 +488,28 @@ function moveMonster(){
             } else {
                 monster.setAttribute("y", parseInt(monster.getAttribute("y")) - 1);
             }
+        }
+    }
+}
+
+function movePlatform(){
+    var platform = svgdoc.getElementById("movingPlatform");
+    var currentY = parseInt(platform.getAttribute("y")); 
+    // lowY > highY
+    var highY = parseInt(platform.getAttribute("highY"));
+    var lowY = parseInt(platform.getAttribute("lowY")); 
+
+    if(platformUp) {
+        if(currentY == highY) {
+            platformUp = false;
+        } else {
+            platform.setAttribute("y", currentY - 1);
+        }
+    } else {
+        if(currentY == lowY) {
+            platformUp = true;
+        } else {
+            platform.setAttribute("y", currentY + 1);
         }
     }
 }
@@ -635,13 +694,16 @@ function collisionDetection() {
     // Check whether the player collides with a monster / monster's bullet
     if(!cheatmode) {
         var monsterBullet = svgdoc.getElementById("monsterBullets").childNodes.item(0);
-        var x = parseFloat(monsterBullet.getAttribute("x"));
-        var y = parseFloat(monsterBullet.getAttribute("y"));
-        var monsterBulletPos = new Point(x, y);
+        
+        if(monsterBullet) {
+            var x = parseFloat(monsterBullet.getAttribute("x"));
+            var y = parseFloat(monsterBullet.getAttribute("y"));
+            var monsterBulletPos = new Point(x, y);
 
-        var monsterOverlap = intersect(monsterBulletPos, MONSTER_BULLET_SIZE, player.position, PLAYER_SIZE);
-        if(monsterOverlap) {
-            gameOver();
+            var bulletOverlap = intersect(monsterBulletPos, MONSTER_BULLET_SIZE, player.position, PLAYER_SIZE);
+            if(bulletOverlap) {
+                gameOver();
+            }
         }
 
         for (var i = 0; i < monsters.childNodes.length; i++) {
@@ -837,6 +899,8 @@ function startNewLevel(){
     canShoot = true;
     timeRemain = GAMETIMELIMIT;
     monsterUp = true;
+    platformUp = true;
+    touchedPlatform = null;
     svgdoc.documentElement.addEventListener("keydown", keydown, false);
     svgdoc.documentElement.addEventListener("keyup", keyup, false);
 
@@ -865,5 +929,37 @@ function updateCheatMode(){
         svgdoc.getElementById("cheatmodetext").textContent = "OFF";
         svgdoc.getElementById("bullettext").textContent = bulletLeft;
     }
+}
+
+function platformDisappear(){
+    var platforms = svgdoc.getElementById("platforms");
     
+    for (var i = 0; i < platforms.childNodes.length; i++) {
+        var platform = platforms.childNodes.item(i);
+
+        if(platform.getAttribute("delete") == "true") {
+            var animation = svgdoc.createElementNS("http://www.w3.org/2000/svg", "animate");
+            animation.setAttribute("attributeType", "CSS");
+            animation.setAttribute("attributeName", "fill");
+            animation.setAttribute("from", "lightseagreen");
+            animation.setAttribute("to", "powderblue");
+            animation.setAttribute("dur", "1s");
+            animation.setAttribute("repeatCount", "indefinite");
+
+            platform.appendChild(animation);
+
+        }
+    }
+}
+
+function deletePlatform(){
+    var platforms = svgdoc.getElementById("platforms");
+    
+    for (var i = 0; i < platforms.childNodes.length; i++) {
+        var platform = platforms.childNodes.item(i);
+
+        if(platform.getAttribute("delete") == "true") {
+            platforms.removeChild(platform);
+        }
+    }
 }
