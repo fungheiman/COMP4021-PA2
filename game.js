@@ -123,6 +123,7 @@ var PLAYER_SIZE = new Size(40, 40);         // The size of the player
 var MONSTER_SIZE = new Size(35, 40);        // The size of a monster
 var SCREEN_SIZE = new Size(600, 560);       // The size of the game screen
 var BULLET_SIZE = new Size(12, 12);
+var PORTAL_SIZE = new Size(40, 40);
 var MONSTER_BULLET_SIZE = new Size(10, 10); // The size of a bullet
 var GOODTHINGD_SIZE = new Size(50, 38);     // The size of the good thing
 var PLAYER_INIT_POS  = new Point(0, 20);     // The initial position of the player
@@ -138,9 +139,9 @@ var GAME_INTERVAL = 25;                     // The time interval of running the 
 var SHOOT_INTERVAL = 200.0;                 // The period when shooting is disabled
 var GAMETIMELIMIT = 60;
 var MAXBULLET = 8;
-var INITIAL_MONSTER_NUM = 0;
+var INITIAL_MONSTER_NUM = 6;
 var MONSTER_INCREMENT = 4;
-var INITIAL_GOOD_NUM = 0;
+var INITIAL_GOOD_NUM = 8;
 var GOOD_INCREMENT = 1;
 
 //
@@ -235,8 +236,7 @@ function startonclick(){
 
     // Start the game interval
     gameInterval = setInterval("gamePlay()", GAME_INTERVAL);
-    gameTimeCountDown();
-    
+    gameTimeCountDown();  
 }
 
 //
@@ -357,12 +357,12 @@ function gamePlay() {
 
     // Set the location back to the player object (before update the screen)
     player.position = position;
-
-    updateScreen();
+    
     moveBullets();
     collisionDetection();
     moveMonster();
     moveMonsterBullet();
+    updateScreen();
     
 }
 
@@ -386,6 +386,52 @@ function updateScreen() {
     var namex = player.position.x + PLAYER_SIZE.w/2;
     var namey = player.position.y - 5;
     svgdoc.getElementById("nameText").setAttribute("transform", "translate(" + namex + "," + namey + ")");
+}
+
+// This function maintains the timer
+function gameTimeCountDown() {
+    var timertext = svgdoc.getElementById("timertext");
+    timertext.textContent = timeRemain;
+    timeRemain--;
+    gametimer = setTimeout("gameTimeCountDown()", 1000);
+
+    if(timeRemain < 5) {
+        var blinking = svgdoc.createElementNS("http://www.w3.org/2000/svg", "animate");
+        blinking.setAttribute("id", "timerblinking");
+        blinking.setAttribute("attributeType", "CSS");
+        blinking.setAttribute("attributeName", "opacity");
+        blinking.setAttribute("values", "1;0;1");
+        blinking.setAttribute("dur", "0.5s");
+        blinking.setAttribute("repeatCount", "indefinite");
+
+        timertext.setAttribute("style", "fill:red;font-size:30px;text-anchor:middle;font-weight:bold;")
+        timertext.appendChild(blinking);
+    }
+    
+    if(timeRemain < 0) {
+        gameOver();
+    }
+}
+
+// This function checks if a good thing appear with in platform
+function goodThingCollidePlatform(goodthingPos){
+    var platforms = svgdoc.getElementById("platforms");
+    for (var i = 0; i < platforms.childNodes.length; i++) {
+        var node = platforms.childNodes.item(i);
+        if (node.nodeName != "rect") continue;
+
+        var x = parseFloat(node.getAttribute("x"));
+        var y = parseFloat(node.getAttribute("y"));
+        var w = parseFloat(node.getAttribute("width"));
+        var h = parseFloat(node.getAttribute("height"));
+        var pos = new Point(x, y);
+        var size = new Size(w, h);
+
+        if (intersect(goodthingPos, GOODTHINGD_SIZE, pos, size)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 // This function creates monster
@@ -442,107 +488,7 @@ function createMonster(num) {
     }
 }
 
-function moveMonster(){
-    var monsters = svgdoc.getElementById("monsters");
-    
-    for (var i = 0; i < monsters.childNodes.length; i++) {
-        var monster = monsters.childNodes.item(i);
-        var x = parseInt(monster.getAttribute("x"));
-        var y = parseInt(monster.getAttribute("y"));
-        var direction = monster.getAttribute("direction");
-        var targetX = parseInt(monster.getAttribute("targetX"));
-        var targetY = parseInt(monster.getAttribute("targetY"));
-        
-        // monster reach target position or reach the screen edge -> set a new random x
-        if(x == targetX) {
-            var targetX = Math.floor(Math.random() * (SCREEN_SIZE.w - MONSTER_SIZE.w));
-            monster.setAttribute("targetX", targetX);
-
-            // set the correct direction monster image
-             if (targetX >= x) {   
-                monster.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#monster-right");
-                monster.setAttribute("direction", "right");
-            } else {
-                monster.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#monster-left");
-                monster.setAttribute("direction", "left");
-            }
-
-        } else {
-            // move to the target x
-            if(direction == "right") {
-                monster.setAttribute("x", x + MONSTER_SPEED);
-            } else {
-                monster.setAttribute("x", x - MONSTER_SPEED);
-            }
-        }
-
-        // move monster up and down
-        if(y == targetY) {
-            if(monsterUp) {
-                monster.setAttribute("targetY", y - 10);
-                monsterUp = false;
-            } else {
-                monster.setAttribute("targetY", y + 10);
-                monsterUp = true;
-            }
-        } else {
-            if(monsterUp) {
-            monster.setAttribute("y", parseInt(monster.getAttribute("y")) + 1);
-            } else {
-                monster.setAttribute("y", parseInt(monster.getAttribute("y")) - 1);
-            }
-        }
-    }
-}
-
-function movePlatform(){
-    var platform = svgdoc.getElementById("movingPlatform");
-    var currentY = parseInt(platform.getAttribute("y")); 
-    var currentX = parseInt(platform.getAttribute("x"));
-    // lowY > highY
-    var highY = parseInt(platform.getAttribute("highY"));
-    var lowY = parseInt(platform.getAttribute("lowY")); 
-
-    if(platformUp) {
-        if(currentY == highY) {
-            platformUp = false;
-        } else {
-            platform.setAttribute("y", currentY - 1);
-        }
-    } else {
-        if(currentY == lowY) {
-            platformUp = true;
-        } else {
-            if(!intersect(new Point(currentX, currentY+1), new Size(60,20), player.position, PLAYER_SIZE)){
-                platform.setAttribute("y", currentY + 1); 
-            } else {
-                platformUp = true;
-            }
-        }
-    }
-}
-
-function goodThingCollidePlatform(goodthingPos){
-    var platforms = svgdoc.getElementById("platforms");
-    for (var i = 0; i < platforms.childNodes.length; i++) {
-        var node = platforms.childNodes.item(i);
-        if (node.nodeName != "rect") continue;
-
-        var x = parseFloat(node.getAttribute("x"));
-        var y = parseFloat(node.getAttribute("y"));
-        var w = parseFloat(node.getAttribute("width"));
-        var h = parseFloat(node.getAttribute("height"));
-        var pos = new Point(x, y);
-        var size = new Size(w, h);
-
-        if (intersect(goodthingPos, GOODTHINGD_SIZE, pos, size)) {
-            return true;
-        }
-    }
-    return false;
-}
-
-// This function creates monster
+// This function creates goo thing
 function creatGoodThings(num) {
 
     var goodthings = svgdoc.getElementById("goodthings");
@@ -612,6 +558,7 @@ function shootBullet() {
     }
 }
 
+// This function enable one special monster shooting bullets
 function monsterShootBullet(monster){
 
     // Create the bullet by createing a use node
@@ -636,6 +583,86 @@ function monsterShootBullet(monster){
     svgdoc.getElementById("monsterBullets").appendChild(bullet);
 }
 
+// This function moves the monster around
+function moveMonster(){
+    var monsters = svgdoc.getElementById("monsters");
+    
+    for (var i = 0; i < monsters.childNodes.length; i++) {
+        var monster = monsters.childNodes.item(i);
+        var x = parseInt(monster.getAttribute("x"));
+        var y = parseInt(monster.getAttribute("y"));
+        var direction = monster.getAttribute("direction");
+        var targetX = parseInt(monster.getAttribute("targetX"));
+        var targetY = parseInt(monster.getAttribute("targetY"));
+        
+        // monster reach target position or reach the screen edge -> set a new random x
+        if(x == targetX) {
+            var targetX = Math.floor(Math.random() * (SCREEN_SIZE.w - MONSTER_SIZE.w));
+            monster.setAttribute("targetX", targetX);
+
+            // set the correct direction monster image
+             if (targetX >= x) {   
+                monster.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#monster-right");
+                monster.setAttribute("direction", "right");
+            } else {
+                monster.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#monster-left");
+                monster.setAttribute("direction", "left");
+            }
+
+        } else {
+            // move to the target x
+            if(direction == "right") {
+                monster.setAttribute("x", x + MONSTER_SPEED);
+            } else {
+                monster.setAttribute("x", x - MONSTER_SPEED);
+            }
+        }
+
+        // move monster up and down
+        if(y == targetY) {
+            if(monsterUp) {
+                monster.setAttribute("targetY", y - 10);
+                monsterUp = false;
+            } else {
+                monster.setAttribute("targetY", y + 10);
+                monsterUp = true;
+            }
+        } else {
+            if(monsterUp) {
+            monster.setAttribute("y", parseInt(monster.getAttribute("y")) + 1);
+            } else {
+                monster.setAttribute("y", parseInt(monster.getAttribute("y")) - 1);
+            }
+        }
+    }
+}
+
+// This function move the player's bullet
+function moveBullets() {
+    // Go through all bullets
+    var bullets = svgdoc.getElementById("bullets");
+    
+    for (var i = 0; i < bullets.childNodes.length; i++) {
+        var node = bullets.childNodes.item(i);
+        var x = parseInt(node.getAttribute("x"));
+        var shotdir = node.getAttribute("motion")
+
+        // Update the position of the bullet
+        if (shotdir == shootType.RIGHT) {   
+            node.setAttribute("x", x + BULLET_SPEED);
+        } else {
+            node.setAttribute("x", x - BULLET_SPEED);
+        }
+      
+        // If the bullet is not inside the screen delete it from the group
+        if (x > SCREEN_SIZE.w || x < 0) {
+            bullets.removeChild(node);
+            i--;
+        }
+    }
+}
+
+// This function move the monster's bullet
 function moveMonsterBullet() {
     var bullet = svgdoc.getElementById("monsterBullets").childNodes.item(0);
     
@@ -669,30 +696,70 @@ function moveMonsterBullet() {
     }  
 }
 
-function moveBullets() {
-    // Go through all bullets
-    var bullets = svgdoc.getElementById("bullets");
-    
-    for (var i = 0; i < bullets.childNodes.length; i++) {
-        var node = bullets.childNodes.item(i);
-        var x = parseInt(node.getAttribute("x"));
-        var shotdir = node.getAttribute("motion")
+// This function moves the vertical platform up and down
+function movePlatform(){
+    var platform = svgdoc.getElementById("movingPlatform");
+    var currentY = parseInt(platform.getAttribute("y")); 
+    var currentX = parseInt(platform.getAttribute("x"));
+    // lowY > highY
+    var highY = parseInt(platform.getAttribute("highY"));
+    var lowY = parseInt(platform.getAttribute("lowY")); 
 
-        // Update the position of the bullet
-        if (shotdir == shootType.RIGHT) {   
-            node.setAttribute("x", x + BULLET_SPEED);
+    if(platformUp) {
+        if(currentY == highY) {
+            platformUp = false;
         } else {
-            node.setAttribute("x", x - BULLET_SPEED);
+            platform.setAttribute("y", currentY - 1);
         }
-      
-        // If the bullet is not inside the screen delete it from the group
-        if (x > SCREEN_SIZE.w || x < 0) {
-            bullets.removeChild(node);
-            i--;
+    } else {
+        if(currentY == lowY) {
+            platformUp = true;
+        } else {
+            if(!intersect(new Point(currentX, currentY+1), new Size(60,20), player.position, PLAYER_SIZE)){
+                platform.setAttribute("y", currentY + 1); 
+            } else {
+                platformUp = true;
+            }
         }
     }
 }
 
+// This function makes special platforms disappear animation
+function platformDisappear(){
+    var platforms = svgdoc.getElementById("platforms");
+    
+    for (var i = 0; i < platforms.childNodes.length; i++) {
+        var platform = platforms.childNodes.item(i);
+
+        if(platform.getAttribute("delete") == "true") {
+            var animation = svgdoc.createElementNS("http://www.w3.org/2000/svg", "animate");
+            animation.setAttribute("attributeType", "CSS");
+            animation.setAttribute("attributeName", "fill");
+            animation.setAttribute("from", "lightseagreen");
+            animation.setAttribute("to", "powderblue");
+            animation.setAttribute("dur", "1s");
+            animation.setAttribute("repeatCount", "indefinite");
+
+            platform.appendChild(animation);
+
+        }
+    }
+}
+
+// This function delete the special disappear platform from the DOM
+function deletePlatform(){
+    var platforms = svgdoc.getElementById("platforms");
+    
+    for (var i = 0; i < platforms.childNodes.length; i++) {
+        var platform = platforms.childNodes.item(i);
+
+        if(platform.getAttribute("delete") == "true") {
+            platforms.removeChild(platform);
+        }
+    }
+}
+
+// This function checks if there is aby collision between monsters, good things, bullets and player
 function collisionDetection() {
     
     var monsters = svgdoc.getElementById("monsters");
@@ -744,6 +811,21 @@ function collisionDetection() {
         }
     }
 
+    // Check whether user touch a transmission portal
+    var x = 560;
+    var y1 = 180;
+    var y2 = 500;
+    var pos1 = new Point(x, y1);
+    var pos2 = new Point(x, y2);
+
+    if(player.position.y == y1 && player.position.x > (x-32)){
+        player.position = new Point(x - 70, y2);
+        
+    } else if (player.position.y == y2 && player.position.x > (x-32)) {
+        player.position = new Point(x - 70, y1);
+    }
+
+
     // Check whether a bullet hits a monster   
     for (var i = 0; i < bullets.childNodes.length; i++) {
         var bullet = bullets.childNodes.item(i);
@@ -779,9 +861,6 @@ function collisionDetection() {
 
     // Check if player arrive the exit
     if(goodthingLeft == 0) {
-        var exit = svgdoc.getElementById("exitcoor");
-        var x =  parseInt(exit.getAttribute("x"));
-        var y =  parseInt(exit.getAttribute("y"));
         var exitPos = new Point(560,0);
         var exitSize = new Size(40,40);
 
@@ -792,79 +871,25 @@ function collisionDetection() {
     }
 }
 
-function gameTimeCountDown() {
-    var timertext = svgdoc.getElementById("timertext");
-    timertext.textContent = timeRemain;
-    timeRemain--;
-    gametimer = setTimeout("gameTimeCountDown()", 1000);
-
-    if(timeRemain < 5) {
-        var blinking = svgdoc.createElementNS("http://www.w3.org/2000/svg", "animate");
-        blinking.setAttribute("id", "timerblinking");
-        blinking.setAttribute("attributeType", "CSS");
-        blinking.setAttribute("attributeName", "opacity");
-        blinking.setAttribute("values", "1;0;1");
-        blinking.setAttribute("dur", "0.5s");
-        blinking.setAttribute("repeatCount", "indefinite");
-
-        timertext.setAttribute("style", "fill:red;font-size:30px;text-anchor:middle;font-weight:bold;")
-        timertext.appendChild(blinking);
-    }
-    
-    if(timeRemain < 0) {
-        gameOver();
-    }
-}
-
-function gameOver(){
-    svgdoc.getElementById("endgame").style.visibility = "";
-    
-    var timertext = svgdoc.getElementById("timertext")
-        timertext.setAttribute("style", "fill:chocolate;font-size:30px;text-anchor:middle;font-weight:bold;");
-    var blinking = svgdoc.getElementById("timerblinking");
-        if(blinking) timertext.removeChild(blinking);
-    
-    clearInterval(gameInterval);
-    clearTimeout(gametimer);
-
-    // remove listeners
-    svgdoc.documentElement.removeEventListener("keydown", keydown, false);
-    svgdoc.documentElement.removeEventListener("keyup", keyup, false);
-
-    setTimeout("showHighScore();", 1000);
-}
-
-function showHighScore(){
-    svgdoc.getElementById("endgame").style.visibility = "hidden";
-
-    // Get the high score table from cookies
-    table = getHighScoreTable();
-
-    // Create the new score record
-    var record = new ScoreRecord(username, score);
-
-    // Insert the new score record
-    var pos = table.length;
-    for (var i = 0; i < table.length; i++) {
-        if (record.score > table[i].score) {
-            pos = i;
-            break;
-        }
-    }
-    table.splice(pos, 0, record);
-
-    // Store the new high score table
-    setHighScoreTable(table);
-
-    // Show the high score table
-    showHighScoreTable(table, username);
-}
-
+// This function update the score during the game
 function updateScore(plusscore){
     score = score + plusscore;
     svgdoc.getElementById("scoretext").textContent = score;
 }
 
+// This function controls the on and off of cheat mode
+function updateCheatMode(){
+
+    if (cheatmode) {
+        svgdoc.getElementById("cheatmodetext").textContent = "ON";
+        svgdoc.getElementById("bullettext").textContent = "unlimited";
+    } else {
+        svgdoc.getElementById("cheatmodetext").textContent = "OFF";
+        svgdoc.getElementById("bullettext").textContent = bulletLeft;
+    }
+}
+
+// This function stop the game temporarily after finishing one level
 function finishLevel(){
 
     // stop updating game
@@ -898,6 +923,7 @@ function finishLevel(){
     setTimeout("startNewLevel()", 2000);
 }
 
+// This function prepares everything for a new level
 function startNewLevel(){
     svgdoc.getElementById("levelpopup").style.visibility = "hidden"; 
     
@@ -928,46 +954,50 @@ function startNewLevel(){
     gameTimeCountDown();
 }
 
-function updateCheatMode(){
+// This function stop the game after game over
+function gameOver(){
+    svgdoc.getElementById("endgame").style.visibility = "";
+    
+    var timertext = svgdoc.getElementById("timertext")
+        timertext.setAttribute("style", "fill:chocolate;font-size:30px;text-anchor:middle;font-weight:bold;");
+    var blinking = svgdoc.getElementById("timerblinking");
+        if(blinking) timertext.removeChild(blinking);
+    
+    clearInterval(gameInterval);
+    clearTimeout(gametimer);
 
-    if (cheatmode) {
-        svgdoc.getElementById("cheatmodetext").textContent = "ON";
-        svgdoc.getElementById("bullettext").textContent = "unlimited";
-    } else {
-        svgdoc.getElementById("cheatmodetext").textContent = "OFF";
-        svgdoc.getElementById("bullettext").textContent = bulletLeft;
-    }
+    // remove listeners
+    svgdoc.documentElement.removeEventListener("keydown", keydown, false);
+    svgdoc.documentElement.removeEventListener("keyup", keyup, false);
+
+    setTimeout("showHighScore();", 1000);
 }
 
-function platformDisappear(){
-    var platforms = svgdoc.getElementById("platforms");
-    
-    for (var i = 0; i < platforms.childNodes.length; i++) {
-        var platform = platforms.childNodes.item(i);
+// This function shoes the high score after game over
+function showHighScore(){
+    svgdoc.getElementById("endgame").style.visibility = "hidden";
 
-        if(platform.getAttribute("delete") == "true") {
-            var animation = svgdoc.createElementNS("http://www.w3.org/2000/svg", "animate");
-            animation.setAttribute("attributeType", "CSS");
-            animation.setAttribute("attributeName", "fill");
-            animation.setAttribute("from", "lightseagreen");
-            animation.setAttribute("to", "powderblue");
-            animation.setAttribute("dur", "1s");
-            animation.setAttribute("repeatCount", "indefinite");
+    // Get the high score table from cookies
+    table = getHighScoreTable();
 
-            platform.appendChild(animation);
+    // Create the new score record
+    var record = new ScoreRecord(username, score);
 
+    // Insert the new score record
+    var pos = table.length;
+    for (var i = 0; i < table.length; i++) {
+        if (record.score > table[i].score) {
+            pos = i;
+            break;
         }
     }
+    table.splice(pos, 0, record);
+
+    // Store the new high score table
+    setHighScoreTable(table);
+
+    // Show the high score table
+    showHighScoreTable(table, username);
 }
 
-function deletePlatform(){
-    var platforms = svgdoc.getElementById("platforms");
-    
-    for (var i = 0; i < platforms.childNodes.length; i++) {
-        var platform = platforms.childNodes.item(i);
 
-        if(platform.getAttribute("delete") == "true") {
-            platforms.removeChild(platform);
-        }
-    }
-}
