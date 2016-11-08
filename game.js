@@ -165,13 +165,20 @@ var monsterUp = true;
 var platformUp = true;
 var onPlatformTimer = null;
 var touchedPlatform = null;
-
-//
-// Variables for bullets
-//
 var canShoot = true;                // A flag indicating whether the player can shoot a bullet
 var shootType = {LEFT:0, RIGHT:1};
 var bulletLeft = MAXBULLET;
+
+// 
+// Sounds for the game
+//
+var die = new Audio('die.mp3');
+var shoot = new Audio('shoot.mp3');
+var clapping = new Audio('clapping.mp3');
+var monsterDie = new Audio('monster-die.mp3');
+var bgmusic = new Audio('creepy.mp3');
+bgmusic.loop = true;
+var good = new Audio('good.mp3');
 
 //
 // The load function for the SVG document
@@ -207,6 +214,10 @@ function load(evt) {
     monsterUp = true;
     platformUp = true;
     touchedPlatform = null;
+
+    // play sound
+    bgmusic.currentTime = 0;
+    bgmusic.play();
 
     startonclick();
 }
@@ -548,6 +559,10 @@ function shootBullet() {
     bullet.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#bullet");
     svgdoc.getElementById("bullets").appendChild(bullet);
 
+    // play sound
+    shoot.currentTime = 0;
+    shoot.play();
+
     if(!cheatmode) {
         bulletLeft--;
         svgdoc.getElementById("bullettext").textContent = bulletLeft;
@@ -808,6 +823,9 @@ function collisionDetection() {
             goodthingLeft--;
             var plusscore = 20;
             updateScore(plusscore);
+            // play sound
+            good.currentTime = 0;
+            good.play();
         }
     }
 
@@ -855,6 +873,10 @@ function collisionDetection() {
                     var plusscore = 15;
                 }                   
                 updateScore(plusscore);
+
+                // play sound
+                monsterDie.currentTime = 0;
+                monsterDie.play();
             }
         }  
     }
@@ -916,6 +938,10 @@ function finishLevel(){
     currentLevel++;
     svgdoc.getElementById("leveltext").textContent = currentLevel;
 
+    // play sound
+    clapping.currentTime = 0;
+    clapping.play();
+
     // popup for next level
     svgdoc.getElementById("levelpopup").style.visibility = "";    
     svgdoc.getElementById("levelpopuptext").textContent = "Level " + currentLevel;
@@ -969,6 +995,9 @@ function gameOver(){
     // remove listeners
     svgdoc.documentElement.removeEventListener("keydown", keydown, false);
     svgdoc.documentElement.removeEventListener("keyup", keyup, false);
+
+    die.currentTime = 0;
+    die.play();
 
     setTimeout("showHighScore();", 1000);
 }
