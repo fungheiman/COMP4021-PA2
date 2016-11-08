@@ -56,6 +56,7 @@ Player.prototype.isOnPlatform = function() {
             if(disappear == "false") {
                 platforms.childNodes.item(touchedPlatform).setAttribute("touched", "false");
                 touchedPlatform = null;
+                // player leave the disappear platform in 0.5s
                 clearTimeout(onPlatformTimer);
             }
             
@@ -89,7 +90,7 @@ Player.prototype.collidePlatform = function(position) {
         var size = new Size(w, h);
 
         if (intersect(position, PLAYER_SIZE, pos, size)) {
-            position.x = this.position.x;
+            if(node.getAttribute("id") != "movingPlatform") position.x = this.position.x;
             if (intersect(position, PLAYER_SIZE, pos, size)) {
                 if (this.position.y >= y + h)
                     position.y = y + h;
@@ -317,6 +318,8 @@ function keyup(evt) {
 // This function updates the position and motion of the player in the system
 //
 function gamePlay() {
+    movePlatform();
+
     // Check whether the player is on a platform
     var isOnPlatform = player.isOnPlatform();
     
@@ -360,7 +363,7 @@ function gamePlay() {
     collisionDetection();
     moveMonster();
     moveMonsterBullet();
-    movePlatform();
+    
 }
 
 //
@@ -495,6 +498,7 @@ function moveMonster(){
 function movePlatform(){
     var platform = svgdoc.getElementById("movingPlatform");
     var currentY = parseInt(platform.getAttribute("y")); 
+    var currentX = parseInt(platform.getAttribute("x"));
     // lowY > highY
     var highY = parseInt(platform.getAttribute("highY"));
     var lowY = parseInt(platform.getAttribute("lowY")); 
@@ -509,7 +513,11 @@ function movePlatform(){
         if(currentY == lowY) {
             platformUp = true;
         } else {
-            platform.setAttribute("y", currentY + 1);
+            if(!intersect(new Point(currentX, currentY+1), new Size(60,20), player.position, PLAYER_SIZE)){
+                platform.setAttribute("y", currentY + 1); 
+            } else {
+                platformUp = true;
+            }
         }
     }
 }
